@@ -1,0 +1,18 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+/* Respecting interfaces
+
+   This implementation of the remove_green() function takes a pixel and
+   return a pixel with green intensity 0 and with other intensities
+   unchanged. It does NOT currently respect the pixels interface:
+   change it so that it does.
+*/
+
+pixel_t remove_green(pixel_t p) {
+  int alpha = get_alpha(p);
+  int red =  get_red(p);
+  int blue = get_blue(p);
+  return make_pixel(alpha,red,0,blue);
+}

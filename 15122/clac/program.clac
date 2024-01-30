@@ -1,0 +1,9 @@
+: noop ;
+: dup 1 pick ;
+: count_body 10 / count 1 + ;
+: count dup if count_body 1 skip noop ;
+: first 10 % ;
+: reverseNum swap 10 / reverse ;
+: tentimes count 10 swap ** ;
+: reverse_body dup first reverseNum dup tentimes rot * + ;
+: reverse dup if reverse_body 2 skip drop 0 ;

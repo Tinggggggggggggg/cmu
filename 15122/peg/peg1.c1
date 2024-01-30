@@ -1,0 +1,84 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+/*
+ * Peg solitaire solver
+ *
+ * 15-122 Principles of Imperative Computation */
+
+#use <conio>
+#use <util>
+
+int solve_peg(board B, stack_t solution)
+//@requires is_board(B);
+{
+  int small = num_pegs(B);
+  stack_t allmoves = all_moves(B);
+  // allmoves efficiency?
+  // base case
+  if (num_pegs(B) == 1){
+    return 1;
+  }
+  else {
+    while (!stack_empty(allmoves)){
+      move one_move = (move)pop(allmoves);
+      make_move(B,one_move);
+      void* o_move = (void*) one_move;
+      push(solution,o_move);
+      int num = solve_peg(B,solution);
+      if (num < small){
+        small = num;
+      }
+      if (num != 1){
+        undo_move(B,(move)pop(solution));
+      } else {
+        return 1;
+      }
+    }
+  }
+  return small;
+}
+
+
+int solve(board B, stack_t Sol)
+//@requires is_board(B);
+{
+  stack_t solution = stack_new();
+  int res = solve_peg(B,solution);
+  if (res == 1){
+    while (!stack_empty(solution)){
+      push(Sol,pop(solution));
+    }
+  }
+  return res;
+}
+
+// int solve_peg(board B, stack_t solution)
+// // @requires is_board(B);
+// {
+//   int rpeg = num_pegs(B);
+//   stack_t allmoves = all_moves(B);
+//   // base case
+//   if (rpeg == 1){
+//     return 1;
+//   }
+//   else {
+//     while (!stack_empty(allmoves)){
+//       move one_move = pop(allmoves);
+//       make_move(B,one_move);
+//       void* o_move = (void*) one_move;
+//       push(solution,o_move);
+//       int num = solve_peg(B,solution);
+//       if (num < rpeg){
+//         rpeg = num;
+//       }
+//       if (num != 1){
+//         undo_move(B,(move)pop(solution));
+//       } else {
+//         return 1;
+//       }
+//     }
+//   }
+//   return rpeg;
+// }

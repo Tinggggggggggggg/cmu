@@ -1,0 +1,42 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+#use <conio>
+
+int main() {
+  // Create a few text buffers, some correct others incorrect
+  tbuf* tb = alloc(tbuf);
+  tb->start = alloc(dll);
+  tb->end = alloc(dll);
+  tb->start->next = alloc(dll);
+  tb->start->next->data = 'a';
+  tb->start->next->prev = tb->start;
+  // tb->cursor = tb->start->next;
+  // tb->cursor = alloc(dll);
+  // tb->cursor->prev = tb->start->next;
+  // tb->cursor->data = 'c';
+  // tb->cursor->next = tb->start->next->next;
+  tb->start->next->next = alloc(dll);
+  tb->start->next->next->data = 'b';
+  tb->start->next->next->prev = tb->start->next;
+  tb->start->next->next->next = tb->end;
+  // tb->start->next->next->next = alloc(dll);
+  // tb->start->next->next->next->prev = tb->start->next->next;
+  // tb->start->next->next->next->next = NULL;
+  tb->end->prev = alloc(dll);
+  tb->end->prev->next = tb->end;
+  tb->end->prev->prev = tb->start->next;
+  tb->cursor = tb->end;
+
+  assert(is_tbuf(tb));
+
+  // tb->end = alloc(dll);
+  // assert(is_tbuf(tb));
+  // Using them, test your is_tbuf
+
+
+
+  printf("All tests passed!\n");
+  return 0;
+}

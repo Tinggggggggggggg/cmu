@@ -1,0 +1,101 @@
+#use <string>
+
+int f(int x){
+    return 1664525 * x + 1013904223;
+}
+
+int hash_string(string s) {
+    int sum = 0;
+
+    for(int i = 0; i < string_length(s); i++){
+        sum += char_ord(string_charat(s, i));
+        sum = f(sum);
+    }
+
+    return sum; 
+}
+
+
+struct student_info {
+  /* WRITE ME */
+  string andrew_id;
+  int days_present;
+  int days_absent;
+
+};
+typedef struct student_info student;  // WRITE ME
+
+key get_andrewid(entry e)
+//@requires e != NULL;
+// WRITE GOOD CONTRACTS
+{ 
+  // string* a = alloc(string);
+  // *a = *(string*)e;
+  student* a = (student*) e;
+  // a = (student*)e;
+  string* id = alloc(string);
+  *id = a -> andrew_id;
+  void* res = (void*) id;
+    // entry_key(e);
+  /* WRITE ME */
+  return res;  // BOGUS
+}
+
+int hash_andrewid(key k)
+// WRITE GOOD CONTRACTS
+//@requires k != NULL;
+{
+  /* WRITE ME */
+  string id = *(string*)k;
+  int hindex = hash_string(id);
+  return hindex;  // BOGUS
+}
+
+bool same_andrewid(key x, key y)
+//@requires x != NULL && y != NULL;
+// WRITE GOOD CONTRACTS
+{
+  string idx = *(string*)x;
+  string idy = *(string*)y;
+  // int xhindex = hash_string(idx);
+  // int yhindex = hash_string(idy);
+  /* WRITE ME */
+  return string_equal(idx,idy);  // BOGUS
+}
+
+hdict_t new_roster(string[] andrew_ids, int len)
+//@requires \length(andrew_ids) == len;
+// MORE CONTRACTS?
+{
+  /* WRITE ME */
+  // int len = array_length(andrew_ids);
+  hdict_t new = hdict_new(len,&get_andrewid,&hash_andrewid,&same_andrewid);
+  for (int i = 0; i < len; i++){
+    string* id = alloc(string);
+    *id = andrew_ids[i];
+    void* ekey = (void*) id;
+    hdict_insert(new,ekey);
+  }
+
+  // hdict_t new = hdict_new(len,&get_andrewid,&hash_andrewid,&same_andrewid);
+  return new;
+}
+
+// ONLY LIBRARY INTERFACE FUNCTIONS MUST BE USED FOR THE FOLLOWING
+
+void mark_present(hdict_t H, string andrew_id)
+//@requires H != NULL;
+{
+  /* WRITE ME */
+}
+
+void mark_absent(hdict_t H, string andrew_id)
+//@requires H != NULL;
+{
+  /* WRITE ME */
+}
+
+int main(){
+  return 0;
+}
+

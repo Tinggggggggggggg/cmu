@@ -1,0 +1,12 @@
+
+int f(){
+    bool find = false;
+    int count = 0;
+    while (find){
+        count += 1;
+        if (count == 10){
+            find = true;
+        }
+    }
+    return count;
+}

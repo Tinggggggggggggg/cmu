@@ -1,0 +1,88 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+#use <conio>
+#use <parse>
+
+// You are welcome to define helper functions for your tests
+
+int main() {
+  // Create a few texts and dictionaries by hand
+
+
+  // **************check word test********************************
+  // *************************************************************
+  string[]sdict = parse_tokens("apple blue china def era fat ghost hide");
+  // edge cases
+  assert(!check_word(sdict, 8, "appll"));
+  assert(check_word(sdict, 8, "apple"));
+  assert(check_word(sdict, 8, "hide"));
+  assert(!check_word(sdict, 8, "hidy"));
+  // inside
+  assert(!check_word(sdict, 8, "chtnaa"));
+  assert(!check_word(sdict, 8, "gdostt"));
+  assert(check_word(sdict, 8, "era"));
+  assert(check_word(sdict, 8, "blue"));
+  // outside
+  assert(!check_word(sdict, 8, "kitchen"));
+  assert(!check_word(sdict, 8, "abort"));
+  
+  // readfiles small-dict
+  bundle_t sD = read_words("texts/small-dict.txt");
+  string[] smallDict = string_bundle_array(sD);
+  assert(!check_word(smallDict, 42, "aaility"));
+  assert(!check_word(smallDict, 42, "uzual"));
+  assert(!check_word(smallDict, 42, "wake"));
+  assert(check_word(smallDict, 42, "ability"));
+  assert(check_word(smallDict, 42, "however"));
+  assert(check_word(smallDict, 42, "strong"));
+  assert(check_word(smallDict, 42, "usual"));
+
+
+  // **************check better word test*************************
+  // *************************************************************;
+
+  string[]sdict1 = parse_tokens("apple blue china def era fat ghost hide");
+  string[]text1=parse_tokens("blue appl ccina def fatty def def hide ghost");
+  string[] miss1 = alloc_array(string,17);
+  assert(check_text_better(sdict1,8,text1,9,miss1) == 3);
+
+  string[]sdict2 = parse_tokens(" ");
+  string[]text2=parse_tokens("blue ccina appll def fatty def def hide ghost");
+  string[] miss2 = alloc_array(string,17);
+  assert(check_text_better(sdict2,0,text2,9,miss2) == 7);
+
+  string[]sdict3 = parse_tokens("apple blue china def era fat ghost hide");
+  string[]text3=parse_tokens(" ");
+  string[] miss3 = alloc_array(string,17);
+  assert(check_text_better(sdict3,8,text3,0,miss3) == 0);
+
+  string[]sdict4 = parse_tokens("aa bb cc dd ee ff gg hh ii jj kk ll mm");
+  string[]text4=parse_tokens("eg cj uu aa dd dd");
+  string[] miss4 = alloc_array(string,17);
+  assert(check_text_better(sdict4,13,text4,6,miss4) == 3);
+
+  bundle_t sT = read_words("texts/scott-tweet.txt");
+  string[] scottTweet = string_bundle_array(sT);
+  string[] miss5 = alloc_array(string,10);
+  assert(check_text_better(smallDict,42,scottTweet,6,miss5) == 4);
+
+  // for (int i = 0; i < a; i++){
+  //   printf("%s\n",miss[i]);
+  // }
+  // assert(merge(text2,0,4,4,8) == 7);
+
+
+  // bundle_t D = read_words("dict.txt");
+  // string[] dict = string_bundle_array(D);
+  // bundle_t t = read_words("scott-tweet");
+  // string[] tweet = string_bundle_array(t);
+  // bundle_t s = read_words("sloth.txt");
+  // string[] sloth = string_bundle_array(s);
+
+
+
+  printf("All tests passed!\n");
+  return 0;
+}

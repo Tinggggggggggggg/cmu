@@ -1,0 +1,200 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+/* Speller starter code: replace the body of each function with a
+   correct implementation. */
+
+
+#use <conio>
+#use <args>
+#use <string>
+
+bool check_word(string[] dict, int d, string w)
+//@requires \length(dict) == d;
+//@requires is_sorted(dict,0,d) && no_dupes(dict,0,d);
+{
+  int lo = 0;
+  int hi = d;
+  while (lo < hi)
+  //@loop_invariant 0 <= lo && lo <= hi && hi <= d;
+  {
+    int mid = lo + (hi - lo) / 2;
+    //@assert lo <= mid && mid < hi;
+    string midWord = dict[mid];
+    if (string_equal(midWord,w)) return true;
+    if (string_compare(midWord, w) == -1){
+      lo += 1;
+    } else {
+      hi = mid;
+    }
+  }
+  //@assert lo == hi;
+  return false;
+}
+
+int check_text_naive(string[] dict, int d, string[] text, int t, string[] miss)
+//@requires \length(dict) == d;
+//@requires \length(text) == t;
+//@requires \length(miss) >= t;
+//@requires is_sorted(dict,0,d) && no_dupes(dict,0,d);
+//@ensures 0 <= \result && \result <= t;
+//@ensures no_dupes(miss, 0, \result);
+{
+  int numMiss = 0;
+  for (int i = 0; i < t; i++){
+    if (!check_word(dict, d, text[i])){
+      miss[numMiss] = text[i];
+      numMiss += 1;
+    }
+  }
+  return numMiss;
+}
+
+int check_sorted_text(string[] dict, int d, string[] text, int t, string[] miss)
+//@requires \length(dict) == d;
+//@requires \length(text) >= t;
+//@requires \length(miss) >= t && t >= 0;
+//@requires is_sorted(dict, 0, d) && no_dupes(dict, 0, d);
+//@requires is_sorted(text, 0, t) && no_dupes(text, 0, t);
+//@ensures 0 <= \result && \result <= t;
+//@ensures is_sorted(miss, 0, \result) && no_dupes(miss, 0, \result);
+{
+  int dNum = 0;
+  int tNum = 0;
+  int falseNum = 0;
+  // string[] falseWords = alloc_array(string, t);
+  // if (t == 0){
+  //   return falseNum;
+  // }
+  while (dNum < d && tNum < t)
+  //@loop_invariant dNum >= 0 && dNum <= d;
+  //@loop_invariant tNum >= 0 && tNum <= t;
+  {
+    string dWord = dict[dNum];
+    string tWord = text[tNum];
+    if (string_compare(dWord, tWord) == -1){
+      dNum += 1;
+    } else if (string_compare(dWord, tWord) == 1){
+      miss[falseNum] = text[tNum];
+      falseNum += 1;
+      tNum += 1;
+    } else if (string_equal(dWord,tWord))
+    {
+      dNum += 1;
+      tNum += 1;
+    }
+  }
+  // int temp = tNum;
+  if (tNum<t){
+    int temp = falseNum;
+    int temp2 = tNum;
+    for (int i = 0; i < t-temp2;i++){
+      miss[temp + i] = text[tNum];
+      tNum += 1;
+      falseNum += 1;
+    }
+
+  }
+  return falseNum;
+  
+}
+
+int merge(string[] A, int lo1, int hi1, int lo2, int hi2)
+//@requires 0<=lo1 && lo1<hi1 && hi1<=lo2 && lo2<hi2 && hi2<=\length(A);
+//@requires is_sorted(A, lo1, hi1) && no_dupes(A, lo1, hi1);
+//@requires is_sorted(A, lo2, hi2) && no_dupes(A, lo2, hi2);
+//@ensures 0 <= \result && \result <= hi2 - lo1;
+//@ensures is_sorted(A, lo1, lo1 + \result) && no_dupes(A, lo1, lo1 + \result);
+{
+  int num1 = 0;
+  int num2 = 0;
+  int goodNum = 0;
+  string[] merged = alloc_array(string, hi2-lo1);
+  //out of range at the last digit
+  while (num1 < (hi1-lo1) && num2 < (hi2-lo2))
+  //@loop_invariant num1 >= 0 && num1 <= hi1-lo1;
+  //@loop_invariant num2 >= 0 && num2 <= hi2-lo2;
+  {
+    string word1 = A[lo1+num1];
+    string word2 = A[lo2+num2];
+    if (string_compare(word1,word2) == -1){
+      merged[goodNum] = word1;
+      goodNum += 1;
+      num1 += 1;
+    } else if (string_compare(word1,word2) == 1){
+      merged[goodNum] = word2;
+      goodNum += 1;
+      num2 += 1;
+    } else if (string_equal(word1,word2)){
+      merged[goodNum] = word1;
+      goodNum += 1;
+      num1 += 1;
+      num2 += 1;
+    }
+  }
+  
+
+  if (num1 < (hi1-lo1)){
+    int temp = goodNum;
+    for (int i = 0; i < (hi1-lo1-num1); i++){
+      merged[temp + i] = A[lo1+num1+i];
+      goodNum += 1;
+    }
+  } 
+  
+  if (num2 < (hi2-lo2)){
+    int temp = goodNum; 
+    for (int i = 0; i < (hi2-lo2-num2); i++){
+      merged[temp+i] = A[lo2+num2+i];
+      goodNum += 1;
+    }
+  }
+  for (int i = 0; i < goodNum; i++){
+    A[lo1 + i] = merged[i];
+  }
+  // for (int i = 0; i < hi2-lo1; i++){
+  //   printf("%s\n",A[i]);
+  // }
+  return goodNum;
+}
+
+int mergesort(string[] A, int lo, int hi)
+//@requires 0 <= lo && lo <= hi && hi <= \length(A);
+//@ensures 0 <= \result && \result <= hi - lo;
+//@ensures is_sorted(A, lo, lo + \result) && no_dupes(A, lo, lo + \result);
+{
+  if (hi-lo <= 1){
+    return (hi - lo);
+  } 
+//  recursion
+  int mid = lo + (hi-lo)/2;
+  int left = mergesort(A,lo,mid); 
+  //@assert is_sorted(A,lo,mid);
+  int right = mergesort(A,mid,hi); 
+  //@assert is_sorted(A,mid,hi);
+  int unique = merge(A,lo,lo+left,mid,mid+right);
+  return unique;
+}
+
+int check_text_better(string[] dict, int d, string[] text, int t, string[] miss)
+//@requires \length(dict) == d;
+//@requires \length(text) == t;
+//@requires \length(miss) >= t;
+//@requires is_sorted(dict,0,d) && no_dupes(dict,0,d);
+//@ensures 0 <= \result && \result <= t;
+//@ensures is_sorted(miss, 0, \result) && no_dupes(miss, 0, \result);
+{
+  // return 0;  // bogus
+  int uniqueNums = mergesort(text, 0, t);
+  // for (int i = 0; i < uniqueNums; i++){
+  //   printf("%s\n",text[i]);
+  // }
+  // printf("%d\n",uniqueNums);
+  int missNum = check_sorted_text(dict, d, text, uniqueNums, miss);
+  // for (int i = 0; i < missNum; i++){
+  //   printf("%s\n",miss[i]);
+  // }
+  // printf("%d\n",missNum);
+  return missNum;
+}

@@ -1,0 +1,105 @@
+#use <parse>
+
+int testIsIn() {
+  // Here's an example
+  // Remember that parse ints takes a list of integers separated by spaces
+  //   as well as a base (here, 10) in which to interpret the integers
+  sortedlist* S = array_to_linkedlist(parse_ints("-2 6 12", 10), 3);
+
+  /* Test 1 */
+  if (!is_in(S, 6)) {
+      println("Failed Test 1 for is_in");
+      assert(false);
+  }
+
+  sortedlist* S1 = array_to_linkedlist(parse_ints("-1 6 12", 10), 3);
+  if (!is_in(S1, 12)) {
+      println("Failed Test 1 for is_in");
+      assert(false);
+  }
+
+  // if (!is_in(S, 12)) {
+  //     println("Failed Test 1 for is_in");
+  //     assert(false);
+  // }
+  /* TODO : Add more tests for is_in here! */
+
+
+  return 0;
+}
+
+int testInsert() {
+
+  // Here's an example
+  sortedlist* S = array_to_linkedlist(parse_ints("", 10), 0);
+
+  /* Test 1 */
+  insert(S, 5);
+  insert(S,12);
+  if(!is_in(S, 5)) {
+      println("Failed Test 1 for insert");
+      assert(false);
+  }
+  if(!is_in(S, 12)) {
+      println("Failed Test 1 for insert");
+      assert(false);
+  }
+
+
+  sortedlist* S1 = array_to_linkedlist(parse_ints("-1 6 12", 10), 3);
+  insert(S1, 18);
+  insert(S1,-5);
+  if(!is_in(S1, 18)) {
+      println("Failed Test 1 for insert");
+      assert(false);
+  }
+  if(!is_in(S1, -5)) {
+      println("Failed Test 1 for insert");
+      assert(false);
+  }
+  /* TODO : Add more tests for insert here! */
+  return 0;
+}
+
+
+int testDelete() {
+  // Here's an example
+  sortedlist* S = array_to_linkedlist(parse_ints("-2 6 12", 10), 3);
+
+  /* Test 1 */
+  delete(S, 12);
+  if (is_in(S, 12)) {
+      println("Failed Test 1 for delete");
+      assert(false);
+  }
+
+  delete(S, -2);
+  if (is_in(S, -2)) {
+      println("Failed Test 1 for delete");
+      assert(false);
+  }
+
+  delete(S,6);
+  if (is_in(S, -2)) {
+      println("Failed Test 1 for delete");
+      assert(false);
+  }
+
+  sortedlist* S1 = array_to_linkedlist(parse_ints("", 10), 0);
+  delete(S1, -2);
+  if (is_in(S1, -2)) {
+      println("Failed Test 1 for delete");
+      assert(false);
+  }
+
+  /* TODO : Add more tests for delete here! */
+  return 0;
+}
+
+
+int main() {
+  testIsIn();
+  testInsert();
+  testDelete();
+  return 0;
+}

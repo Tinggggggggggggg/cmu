@@ -1,0 +1,508 @@
+C0 C0 FF EE       # magic number
+00 17             # version 11, arch = 1 (64 bits)
+
+00 02             # int pool count
+# int pool
+00 00 03 E8
+00 00 01 FE
+
+03 A1             # string pool total size
+# string pool
+2A 2A 2A 2A 2A 20 50 6F 69 6E 74 65 72 73 3A 20 2A 2A 2A 2A 2A 0A 00  # "***** Pointers: *****\n"
+54 65 73 74 20 31 20 28 69 6D 73 74 6F 72 65 2C 20 69 6D 6C 6F 61 64 29 3A 20 00  # "Test 1 (imstore, imload): "
+0A 00  # "\n"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 31 38 2E 35 2D 31 38 2E 32 31 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 18.5-18.21: assert failed"
+68 65 6C 6C 6F 21 00  # "hello!"
+54 65 73 74 20 32 20 28 61 6D 73 74 6F 72 65 2C 20 61 6D 6C 6F 61 64 29 3A 20 00  # "Test 2 (amstore, amload): "
+0A 00  # "\n"
+68 65 6C 6C 6F 21 00  # "hello!"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 32 35 2E 35 2D 32 35 2E 34 30 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 25.5-25.40: assert failed"
+54 65 73 74 20 33 20 28 61 6D 73 74 6F 72 65 2C 20 61 6D 6C 6F 61 64 2C 20 70 72 6F 62 61 62 6C 79 20 61 6C 73 6F 20 69 6D 73 74 6F 72 65 20 69 6D 6C 6F 61 64 20 69 64 6B 29 3A 20 00  # "Test 3 (amstore, amload, probably also imstore imload idk): "
+0A 00  # "\n"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 33 32 2E 35 2D 33 32 2E 32 32 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 32.5-32.22: assert failed"
+54 65 73 74 20 34 3A 20 00  # "Test 4: "
+0A 00  # "\n"
+54 65 73 74 20 34 3A 20 00  # "Test 4: "
+0A 00  # "\n"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 34 31 2E 35 2D 34 31 2E 32 35 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 41.5-41.25: assert failed"
+54 65 73 74 20 35 20 28 61 6D 73 74 6F 72 65 2C 20 61 6D 6C 6F 61 64 29 3A 20 00  # "Test 5 (amstore, amload): "
+0A 00  # "\n"
+68 65 6C 6C 6F 21 00  # "hello!"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 34 38 2E 35 2D 34 38 2E 34 32 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 48.5-48.42: assert failed"
+54 65 73 74 20 36 20 28 63 6D 73 74 6F 72 65 2C 20 63 6D 6C 6F 61 64 29 3A 20 00  # "Test 6 (cmstore, cmload): "
+0A 00  # "\n"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 35 35 2E 35 2D 35 35 2E 32 33 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 55.5-55.23: assert failed"
+54 65 73 74 20 37 20 28 61 6D 73 74 6F 72 65 2C 20 61 6D 6C 6F 61 64 29 3A 20 00  # "Test 7 (amstore, amload): "
+0A 00  # "\n"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 36 32 2E 35 2D 36 32 2E 32 35 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 62.5-62.25: assert failed"
+0A 2A 2A 2A 2A 2A 20 41 72 72 61 79 73 3A 20 2A 2A 2A 2A 2A 0A 00  # "\n***** Arrays: *****\n"
+41 72 72 61 79 20 74 65 73 74 20 31 3A 20 00  # "Array test 1: "
+0A 00  # "\n"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 37 34 2E 35 2D 37 34 2E 32 38 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 74.5-74.28: assert failed"
+41 72 72 61 79 20 74 65 73 74 20 32 3A 20 00  # "Array test 2: "
+2C 00  # ","
+2C 00  # ","
+0A 00  # "\n"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 38 32 2E 35 2D 38 32 2E 32 39 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 82.5-82.29: assert failed"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 38 33 2E 35 2D 38 33 2E 32 39 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 83.5-83.29: assert failed"
+74 65 73 74 73 2F 63 30 76 6D 2D 74 65 73 74 2E 63 30 3A 20 38 34 2E 35 2D 38 34 2E 32 39 3A 20 61 73 73 65 72 74 20 66 61 69 6C 65 64 00  # "tests/c0vm-test.c0: 84.5-84.29: assert failed"
+0A 2A 2A 2A 2A 2A 20 53 74 72 75 63 74 73 3A 20 2A 2A 2A 2A 2A 0A 00  # "\n***** Structs: *****\n"
+41 71 75 61 72 69 75 6D 20 67 72 61 76 65 6C 00  # "Aquarium gravel"
+53 6E 61 63 6B 3A 20 00  # "Snack: "
+20 00  # " "
+0A 00  # "\n"
+49 6E 64 69 76 69 64 75 61 6C 20 6C 61 64 79 62 75 67 73 00  # "Individual ladybugs"
+4E 65 77 20 73 6E 61 63 6B 3A 20 00  # "New snack: "
+20 00  # " "
+0A 00  # "\n"
+0A 00  # "\n"
+
+00 01             # function count
+# function_pool
+
+#<main>
+00                # number of arguments = 0
+0A                # number of local variables = 10
+03 1D             # code length = 797 bytes
+14 00 00 # aldc 0             # s[0] = "***** Pointers: *****\n"
+B7 00 00 # invokenative 0     # print("***** Pointers: *****\n")
+57       # pop                # (ignore result)
+BB 04    # new 4              # alloc(int)
+36 00    # vstore 0           # a = alloc(int);
+15 00    # vload 0            # a
+10 01    # bipush 1           # 1
+4E       # imstore            # *(a) = 1;
+14 00 17 # aldc 23            # s[23] = "Test 1 (imstore, imload): "
+B7 00 00 # invokenative 0     # print("Test 1 (imstore, imload): ")
+57       # pop                # (ignore result)
+15 00    # vload 0            # a
+2E       # imload             # *(a)
+B7 00 01 # invokenative 1     # printint(*(a))
+57       # pop                # (ignore result)
+14 00 32 # aldc 50            # s[50] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 00    # vload 0            # a
+2E       # imload             # *(a)
+10 01    # bipush 1           # 1
+9F 00 06 # if_cmpeq +6        # if (*(a) == 1) goto <00:cond_true>
+A7 00 08 # goto +8            # goto <01:cond_false>
+# <00:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <02:cond_end>
+# <01:cond_false>
+10 00    # bipush 0           # false
+# <02:cond_end>
+14 00 34 # aldc 52            # s[52] = "tests/c0vm-test.c0: 18.5-18.21: assert failed"
+CF       # assert             # assert (*(a) == 1) [failure message on stack]
+BB 08    # new 8              # alloc(string)
+36 01    # vstore 1           # s = alloc(string);
+15 01    # vload 1            # s
+14 00 62 # aldc 98            # s[98] = "hello!"
+4F       # amstore            # *(s) = "hello!";
+14 00 69 # aldc 105           # s[105] = "Test 2 (amstore, amload): "
+B7 00 00 # invokenative 0     # print("Test 2 (amstore, amload): ")
+57       # pop                # (ignore result)
+15 01    # vload 1            # s
+2F       # amload             # *(s)
+B7 00 00 # invokenative 0     # print(*(s))
+57       # pop                # (ignore result)
+14 00 84 # aldc 132           # s[132] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 01    # vload 1            # s
+2F       # amload             # *(s)
+14 00 86 # aldc 134           # s[134] = "hello!"
+B7 00 02 # invokenative 2     # string_equal(*(s), "hello!")
+14 00 8D # aldc 141           # s[141] = "tests/c0vm-test.c0: 25.5-25.40: assert failed"
+CF       # assert             # assert string_equal(*(s), "hello!") [failure message on stack]
+BB 08    # new 8              # alloc(int*)
+36 02    # vstore 2           # b = alloc(int*);
+15 02    # vload 2            # b
+15 00    # vload 0            # a
+4F       # amstore            # *(b) = a;
+14 00 BB # aldc 187           # s[187] = "Test 3 (amstore, amload, probably also imstore imload idk): "
+B7 00 00 # invokenative 0     # print("Test 3 (amstore, amload, probably also imstore imload idk): ")
+57       # pop                # (ignore result)
+15 02    # vload 2            # b
+2F       # amload             # *(b)
+2E       # imload             # *(*(b))
+B7 00 01 # invokenative 1     # printint(*(*(b)))
+57       # pop                # (ignore result)
+14 00 F8 # aldc 248           # s[248] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 02    # vload 2            # b
+2F       # amload             # *(b)
+2E       # imload             # *(*(b))
+10 01    # bipush 1           # 1
+9F 00 06 # if_cmpeq +6        # if (*(*(b)) == 1) goto <03:cond_true>
+A7 00 08 # goto +8            # goto <04:cond_false>
+# <03:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <05:cond_end>
+# <04:cond_false>
+10 00    # bipush 0           # false
+# <05:cond_end>
+14 00 FA # aldc 250           # s[250] = "tests/c0vm-test.c0: 32.5-32.22: assert failed"
+CF       # assert             # assert (*(*(b)) == 1) [failure message on stack]
+BB 08    # new 8              # alloc(int*)
+36 03    # vstore 3           # bb = alloc(int*);
+15 03    # vload 3            # bb
+15 02    # vload 2            # b
+2F       # amload             # *(b)
+4F       # amstore            # *(bb) = *(b);
+15 03    # vload 3            # bb
+2F       # amload             # *(bb)
+10 02    # bipush 2           # 2
+4E       # imstore            # *(*(bb)) = 2;
+14 01 28 # aldc 296           # s[296] = "Test 4: "
+B7 00 00 # invokenative 0     # print("Test 4: ")
+57       # pop                # (ignore result)
+15 03    # vload 3            # bb
+2F       # amload             # *(bb)
+2E       # imload             # *(*(bb))
+B7 00 01 # invokenative 1     # printint(*(*(bb)))
+57       # pop                # (ignore result)
+14 01 31 # aldc 305           # s[305] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+14 01 33 # aldc 307           # s[307] = "Test 4: "
+B7 00 00 # invokenative 0     # print("Test 4: ")
+57       # pop                # (ignore result)
+15 02    # vload 2            # b
+2F       # amload             # *(b)
+2E       # imload             # *(*(b))
+B7 00 01 # invokenative 1     # printint(*(*(b)))
+57       # pop                # (ignore result)
+14 01 3C # aldc 316           # s[316] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 02    # vload 2            # b
+2F       # amload             # *(b)
+2E       # imload             # *(*(b))
+15 03    # vload 3            # bb
+2F       # amload             # *(bb)
+2E       # imload             # *(*(bb))
+9F 00 06 # if_cmpeq +6        # if (*(*(b)) == *(*(bb))) goto <06:cond_true>
+A7 00 08 # goto +8            # goto <07:cond_false>
+# <06:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <08:cond_end>
+# <07:cond_false>
+10 00    # bipush 0           # false
+# <08:cond_end>
+14 01 3E # aldc 318           # s[318] = "tests/c0vm-test.c0: 41.5-41.25: assert failed"
+CF       # assert             # assert (*(*(b)) == *(*(bb))) [failure message on stack]
+BB 08    # new 8              # alloc(string*)
+36 04    # vstore 4           # ss = alloc(string*);
+15 04    # vload 4            # ss
+15 01    # vload 1            # s
+4F       # amstore            # *(ss) = s;
+14 01 6C # aldc 364           # s[364] = "Test 5 (amstore, amload): "
+B7 00 00 # invokenative 0     # print("Test 5 (amstore, amload): ")
+57       # pop                # (ignore result)
+15 04    # vload 4            # ss
+2F       # amload             # *(ss)
+2F       # amload             # *(*(ss))
+B7 00 00 # invokenative 0     # print(*(*(ss)))
+57       # pop                # (ignore result)
+14 01 87 # aldc 391           # s[391] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 04    # vload 4            # ss
+2F       # amload             # *(ss)
+2F       # amload             # *(*(ss))
+14 01 89 # aldc 393           # s[393] = "hello!"
+B7 00 02 # invokenative 2     # string_equal(*(*(ss)), "hello!")
+14 01 90 # aldc 400           # s[400] = "tests/c0vm-test.c0: 48.5-48.42: assert failed"
+CF       # assert             # assert string_equal(*(*(ss)), "hello!") [failure message on stack]
+BB 01    # new 1              # alloc(char)
+36 05    # vstore 5           # c = alloc(char);
+15 05    # vload 5            # c
+10 63    # bipush 99          # 'c'
+55       # cmstore            # *(c) = 'c';
+14 01 BE # aldc 446           # s[446] = "Test 6 (cmstore, cmload): "
+B7 00 00 # invokenative 0     # print("Test 6 (cmstore, cmload): ")
+57       # pop                # (ignore result)
+15 05    # vload 5            # c
+34       # cmload             # *(c)
+B7 00 03 # invokenative 3     # printchar(*(c))
+57       # pop                # (ignore result)
+14 01 D9 # aldc 473           # s[473] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 05    # vload 5            # c
+34       # cmload             # *(c)
+10 63    # bipush 99          # 'c'
+9F 00 06 # if_cmpeq +6        # if (*(c) == 'c') goto <09:cond_true>
+A7 00 08 # goto +8            # goto <10:cond_false>
+# <09:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <11:cond_end>
+# <10:cond_false>
+10 00    # bipush 0           # false
+# <11:cond_end>
+14 01 DB # aldc 475           # s[475] = "tests/c0vm-test.c0: 55.5-55.23: assert failed"
+CF       # assert             # assert (*(c) == 'c') [failure message on stack]
+BB 08    # new 8              # alloc(char*)
+36 06    # vstore 6           # cc = alloc(char*);
+15 06    # vload 6            # cc
+15 05    # vload 5            # c
+4F       # amstore            # *(cc) = c;
+14 02 09 # aldc 521           # s[521] = "Test 7 (amstore, amload): "
+B7 00 00 # invokenative 0     # print("Test 7 (amstore, amload): ")
+57       # pop                # (ignore result)
+15 06    # vload 6            # cc
+2F       # amload             # *(cc)
+34       # cmload             # *(*(cc))
+B7 00 03 # invokenative 3     # printchar(*(*(cc)))
+57       # pop                # (ignore result)
+14 02 24 # aldc 548           # s[548] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 06    # vload 6            # cc
+2F       # amload             # *(cc)
+34       # cmload             # *(*(cc))
+10 63    # bipush 99          # 'c'
+9F 00 06 # if_cmpeq +6        # if (*(*(cc)) == 'c') goto <12:cond_true>
+A7 00 08 # goto +8            # goto <13:cond_false>
+# <12:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <14:cond_end>
+# <13:cond_false>
+10 00    # bipush 0           # false
+# <14:cond_end>
+14 02 26 # aldc 550           # s[550] = "tests/c0vm-test.c0: 62.5-62.25: assert failed"
+CF       # assert             # assert (*(*(cc)) == 'c') [failure message on stack]
+14 02 54 # aldc 596           # s[596] = "\n***** Arrays: *****\n"
+B7 00 00 # invokenative 0     # print("\n***** Arrays: *****\n")
+57       # pop                # (ignore result)
+10 05    # bipush 5           # 5
+BC 04    # newarray 4         # alloc_array(int, 5)
+36 07    # vstore 7           # array1 = alloc_array(int, 5);
+15 07    # vload 7            # array1
+10 00    # bipush 0           # 0
+63       # aadds              # &array1[0]
+10 01    # bipush 1           # 1
+4E       # imstore            # array1[0] = 1;
+15 07    # vload 7            # array1
+10 01    # bipush 1           # 1
+63       # aadds              # &array1[1]
+10 02    # bipush 2           # 2
+4E       # imstore            # array1[1] = 2;
+15 07    # vload 7            # array1
+10 02    # bipush 2           # 2
+63       # aadds              # &array1[2]
+10 03    # bipush 3           # 3
+4E       # imstore            # array1[2] = 3;
+15 07    # vload 7            # array1
+10 03    # bipush 3           # 3
+63       # aadds              # &array1[3]
+10 04    # bipush 4           # 4
+4E       # imstore            # array1[3] = 4;
+15 07    # vload 7            # array1
+10 04    # bipush 4           # 4
+63       # aadds              # &array1[4]
+10 05    # bipush 5           # 5
+4E       # imstore            # array1[4] = 5;
+14 02 6A # aldc 618           # s[618] = "Array test 1: "
+B7 00 00 # invokenative 0     # print("Array test 1: ")
+57       # pop                # (ignore result)
+15 07    # vload 7            # array1
+10 03    # bipush 3           # 3
+63       # aadds              # &array1[3]
+2E       # imload             # array1[3]
+B7 00 01 # invokenative 1     # printint(array1[3])
+57       # pop                # (ignore result)
+14 02 79 # aldc 633           # s[633] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 07    # vload 7            # array1
+10 03    # bipush 3           # 3
+63       # aadds              # &array1[3]
+2E       # imload             # array1[3]
+10 04    # bipush 4           # 4
+9F 00 06 # if_cmpeq +6        # if (array1[3] == 4) goto <15:cond_true>
+A7 00 08 # goto +8            # goto <16:cond_false>
+# <15:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <17:cond_end>
+# <16:cond_false>
+10 00    # bipush 0           # false
+# <17:cond_end>
+14 02 7B # aldc 635           # s[635] = "tests/c0vm-test.c0: 74.5-74.28: assert failed"
+CF       # assert             # assert (array1[3] == 4) [failure message on stack]
+10 03    # bipush 3           # 3
+BC 08    # newarray 8         # alloc_array(int*, 3)
+36 08    # vstore 8           # array2 = alloc_array(int*, 3);
+15 08    # vload 8            # array2
+10 00    # bipush 0           # 0
+63       # aadds              # &array2[0]
+15 00    # vload 0            # a
+4F       # amstore            # array2[0] = a;
+15 08    # vload 8            # array2
+10 01    # bipush 1           # 1
+63       # aadds              # &array2[1]
+15 02    # vload 2            # b
+2F       # amload             # *(b)
+4F       # amstore            # array2[1] = *(b);
+15 08    # vload 8            # array2
+10 02    # bipush 2           # 2
+63       # aadds              # &array2[2]
+15 03    # vload 3            # bb
+2F       # amload             # *(bb)
+4F       # amstore            # array2[2] = *(bb);
+14 02 A9 # aldc 681           # s[681] = "Array test 2: "
+B7 00 00 # invokenative 0     # print("Array test 2: ")
+57       # pop                # (ignore result)
+15 08    # vload 8            # array2
+10 00    # bipush 0           # 0
+63       # aadds              # &array2[0]
+2F       # amload             # array2[0]
+2E       # imload             # *(array2[0])
+B7 00 01 # invokenative 1     # printint(*(array2[0]))
+57       # pop                # (ignore result)
+14 02 B8 # aldc 696           # s[696] = ","
+B7 00 00 # invokenative 0     # print(",")
+57       # pop                # (ignore result)
+15 08    # vload 8            # array2
+10 01    # bipush 1           # 1
+63       # aadds              # &array2[1]
+2F       # amload             # array2[1]
+2E       # imload             # *(array2[1])
+B7 00 01 # invokenative 1     # printint(*(array2[1]))
+57       # pop                # (ignore result)
+14 02 BA # aldc 698           # s[698] = ","
+B7 00 00 # invokenative 0     # print(",")
+57       # pop                # (ignore result)
+15 08    # vload 8            # array2
+10 02    # bipush 2           # 2
+63       # aadds              # &array2[2]
+2F       # amload             # array2[2]
+2E       # imload             # *(array2[2])
+B7 00 01 # invokenative 1     # printint(*(array2[2]))
+57       # pop                # (ignore result)
+14 02 BC # aldc 700           # s[700] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 08    # vload 8            # array2
+10 00    # bipush 0           # 0
+63       # aadds              # &array2[0]
+2F       # amload             # array2[0]
+2E       # imload             # *(array2[0])
+10 02    # bipush 2           # 2
+9F 00 06 # if_cmpeq +6        # if (*(array2[0]) == 2) goto <18:cond_true>
+A7 00 08 # goto +8            # goto <19:cond_false>
+# <18:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <20:cond_end>
+# <19:cond_false>
+10 00    # bipush 0           # false
+# <20:cond_end>
+14 02 BE # aldc 702           # s[702] = "tests/c0vm-test.c0: 82.5-82.29: assert failed"
+CF       # assert             # assert (*(array2[0]) == 2) [failure message on stack]
+15 08    # vload 8            # array2
+10 01    # bipush 1           # 1
+63       # aadds              # &array2[1]
+2F       # amload             # array2[1]
+2E       # imload             # *(array2[1])
+10 02    # bipush 2           # 2
+9F 00 06 # if_cmpeq +6        # if (*(array2[1]) == 2) goto <21:cond_true>
+A7 00 08 # goto +8            # goto <22:cond_false>
+# <21:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <23:cond_end>
+# <22:cond_false>
+10 00    # bipush 0           # false
+# <23:cond_end>
+14 02 EC # aldc 748           # s[748] = "tests/c0vm-test.c0: 83.5-83.29: assert failed"
+CF       # assert             # assert (*(array2[1]) == 2) [failure message on stack]
+15 08    # vload 8            # array2
+10 02    # bipush 2           # 2
+63       # aadds              # &array2[2]
+2F       # amload             # array2[2]
+2E       # imload             # *(array2[2])
+10 02    # bipush 2           # 2
+9F 00 06 # if_cmpeq +6        # if (*(array2[2]) == 2) goto <24:cond_true>
+A7 00 08 # goto +8            # goto <25:cond_false>
+# <24:cond_true>
+10 01    # bipush 1           # true
+A7 00 05 # goto +5            # goto <26:cond_end>
+# <25:cond_false>
+10 00    # bipush 0           # false
+# <26:cond_end>
+14 03 1A # aldc 794           # s[794] = "tests/c0vm-test.c0: 84.5-84.29: assert failed"
+CF       # assert             # assert (*(array2[2]) == 2) [failure message on stack]
+14 03 48 # aldc 840           # s[840] = "\n***** Structs: *****\n"
+B7 00 00 # invokenative 0     # print("\n***** Structs: *****\n")
+57       # pop                # (ignore result)
+BB 10    # new 16             # alloc(yummy)
+36 09    # vstore 9           # snack_time = alloc(yummy);
+15 09    # vload 9            # snack_time
+62 00    # aaddf 0            # &snack_time->num_snacks
+13 00 00 # ildc 0             # c[0] = 1000
+4E       # imstore            # snack_time->num_snacks = 1000;
+15 09    # vload 9            # snack_time
+62 08    # aaddf 8            # &snack_time->snack_type
+14 03 5F # aldc 863           # s[863] = "Aquarium gravel"
+4F       # amstore            # snack_time->snack_type = "Aquarium gravel";
+14 03 6F # aldc 879           # s[879] = "Snack: "
+B7 00 00 # invokenative 0     # print("Snack: ")
+57       # pop                # (ignore result)
+15 09    # vload 9            # snack_time
+62 00    # aaddf 0            # &snack_time->num_snacks
+2E       # imload             # snack_time->num_snacks
+B7 00 01 # invokenative 1     # printint(snack_time->num_snacks)
+57       # pop                # (ignore result)
+14 03 77 # aldc 887           # s[887] = " "
+B7 00 00 # invokenative 0     # print(" ")
+57       # pop                # (ignore result)
+15 09    # vload 9            # snack_time
+62 08    # aaddf 8            # &snack_time->snack_type
+2F       # amload             # snack_time->snack_type
+B7 00 00 # invokenative 0     # print(snack_time->snack_type)
+57       # pop                # (ignore result)
+14 03 79 # aldc 889           # s[889] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+15 09    # vload 9            # snack_time
+62 00    # aaddf 0            # &snack_time->num_snacks
+13 00 01 # ildc 1             # c[1] = 510
+4E       # imstore            # snack_time->num_snacks = 510;
+15 09    # vload 9            # snack_time
+62 08    # aaddf 8            # &snack_time->snack_type
+14 03 7B # aldc 891           # s[891] = "Individual ladybugs"
+4F       # amstore            # snack_time->snack_type = "Individual ladybugs";
+14 03 8F # aldc 911           # s[911] = "New snack: "
+B7 00 00 # invokenative 0     # print("New snack: ")
+57       # pop                # (ignore result)
+15 09    # vload 9            # snack_time
+62 00    # aaddf 0            # &snack_time->num_snacks
+2E       # imload             # snack_time->num_snacks
+B7 00 01 # invokenative 1     # printint(snack_time->num_snacks)
+57       # pop                # (ignore result)
+14 03 9B # aldc 923           # s[923] = " "
+B7 00 00 # invokenative 0     # print(" ")
+57       # pop                # (ignore result)
+15 09    # vload 9            # snack_time
+62 08    # aaddf 8            # &snack_time->snack_type
+2F       # amload             # snack_time->snack_type
+B7 00 00 # invokenative 0     # print(snack_time->snack_type)
+57       # pop                # (ignore result)
+14 03 9D # aldc 925           # s[925] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+14 03 9F # aldc 927           # s[927] = "\n"
+B7 00 00 # invokenative 0     # print("\n")
+57       # pop                # (ignore result)
+10 00    # bipush 0           # 0
+B0       # return             # 
+
+00 04             # native count
+# native pool
+00 01 00 06       # print
+00 01 00 09       # printint
+00 02 00 5F       # string_equal
+00 01 00 08       # printchar
+

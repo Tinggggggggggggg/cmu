@@ -1,0 +1,72 @@
+#use <args>
+#use <conio>
+
+
+int main() {
+    args_t args = args_parse();
+    string[] argv = args->argv;    // command line arguments
+
+    bundle_t di = read_words(argv[0]);
+    string[] dict = string_bundle_array(di);
+    int d = string_bundle_length(di);
+
+    bundle_t te = read_words(argv[1]);
+    string[] text = string_bundle_array(te);
+    int t = string_bundle_length(te);
+
+    string[] miss = alloc_array(string,d+t);
+    int missNum = check_text_better(dict, d, text, t, miss);
+
+    printf("The number of misspelled words in the text: %d\n\n",missNum);
+
+    int missNum8 = 0;
+    string[] miss15 = alloc_array(string,d+t);
+    int missNum15 = 0;
+    string lastmiss = miss[missNum-1];
+    int lastmissNum = 0;
+    for (int i = 0; i < missNum; i++){
+        if (string_length(miss[i]) == 8){
+            missNum8 += 1;
+        }
+        if (string_length(miss[i]) == 15){
+            miss15[missNum15] = miss[i];
+            missNum15 += 1;
+        }
+        if (string_equal(lastmiss,miss[i])){
+            lastmissNum += 1;
+        }
+    }
+    printf("The number of misspelled words of length 8 in the text: %d\n\n",
+           missNum8);
+    
+    printf("Here are the first 4 misspelled length-15 words in the text:\n"); 
+    printf("1. %s\n", miss15[0]);
+    printf("2. %s\n", miss15[1]);
+    printf("3. %s\n", miss15[2]);
+    printf("4. %s\n", miss15[3]);
+
+    printf("\nThe alphabetically-last misspelled word in the text is %s\n",
+           lastmiss);
+    printf("And it appears %d times \n",lastmissNum);
+
+    return 0;
+
+
+
+
+//   for (int i = 0;i < argc;i++){
+//     printf("\n",argv[i]);
+//   }
+
+
+//   for (int i = 0; i < argc; i++)
+//   //@loop_invariant 0 <= i && i <= argc;
+//   {
+//     printf("Arg #%d: %s\n", i, argv[i]);
+//   }
+
+//   printf("Number of arguments printed: %d\n", argc);
+//   return 0;
+}
+
+

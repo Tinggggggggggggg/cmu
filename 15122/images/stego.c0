@@ -1,0 +1,67 @@
+#use <util>
+
+// hide a secret picture into a cover picture
+pixel_t[]hide(pixel_t[]Cover,pixel_t[]Secret,int width,int height,int quality)
+//@requires is_valid_imagesize(width, height);
+//@requires \length(Cover) == width*height && \length(Secret) == width*height;
+//@ensures \result != Cover && \result != Secret;
+{
+    pixel_t[] Stego = alloc_array(pixel_t, width*height);
+    int mask1 = ~((1 << quality) - 1); // 11111...0...0 for # of quality 0's 
+    int mask2 = (1 << quality) - 1; //     
+    for (int j = 0; j < height; j++)
+    //@loop_invariant 0 <= j;
+    {
+        for (int i = 0; i < width; i++)
+        //@loop_invariant 0 <= i;
+        {
+            //@assert 0 <= j && j < height && 0 <= i && i < width;
+            int index = get_index(j, i, width, height);
+            //@assert 0 <= index && index < \length(Cover);
+            //@assert \length(Cover) == \length(Stego);
+            int Calpha = (get_alpha(Cover[index]))&mask1;
+            int Salpha = ((get_alpha(Secret[index]))>>(8-quality))&mask2;
+            int StAlpha = Calpha|Salpha;
+            int Cred = (get_red(Cover[index]))&mask1;
+            int Sred = ((get_red(Secret[index]))>>(8-quality))&mask2;
+            int StRed = Cred|Sred;
+            int Cgreen = (get_green(Cover[index]))&mask1;
+            int Sgreen = ((get_green(Secret[index]))>>(8-quality))&mask2;
+            int StGreen = Cgreen|Sgreen;
+            int Cblue = (get_blue(Cover[index]))&mask1;
+            int Sblue = ((get_blue(Secret[index]))>>(8-quality))&mask2;
+            int StBlue = Cblue| Sblue;
+            Stego[index] = make_pixel(StAlpha,StRed,StGreen,StBlue);
+        }
+    }
+    return Stego;
+}
+
+// unhide a image from a stego
+pixel_t[] unhide (pixel_t[] Stego, int width, int height, int quality)
+//@requires is_valid_imagesize(width, height);
+//@requires \length(Stego) == width*height;
+//@ensures \result != Stego;
+{
+    pixel_t[] Secret = alloc_array(pixel_t, width*height);
+    // int mask1 = ~((1 << quality) - 1); // 11111...0...0 for # of quali
+    int mask2 = (1 << quality) - 1; //     
+    for (int j = 0; j < height; j++)
+    //@loop_invariant 0 <= j;
+    {
+        for (int i = 0; i < width; i++)
+        //@loop_invariant 0 <= i;
+        {
+            //@assert 0 <= j && j < height && 0 <= i && i < width;
+            int index = get_index(j, i, width, height);
+            //@assert 0 <= index && index < \length(Stego);
+            //@assert \length(Stego) == \length(Secret);
+            int alpha = (get_alpha(Stego[index])&mask2)<<(8-quality);
+            int red = (get_red(Stego[index])&mask2)<<(8-quality);
+            int green = (get_green(Stego[index])&mask2)<<(8-quality);
+            int blue = (get_blue(Stego[index])&mask2)<<(8-quality);
+            Secret[index] = make_pixel(alpha,red,green,blue);
+        }
+    }
+    return Secret;
+}

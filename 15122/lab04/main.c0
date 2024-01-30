@@ -1,0 +1,8 @@
+/**
+ * Returns whether this student failed any tests
+ */
+int main() {
+    run_tests();
+    println("");
+    return 0;
+}

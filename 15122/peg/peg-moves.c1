@@ -1,0 +1,237 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+/*
+ * Peg solitaire solver
+ *
+ * 15-122 Principles of Imperative Computation */
+
+#use <conio>
+#use <util>
+
+struct move_triple{
+  int start;
+  int over;
+  int end;
+  // int col_end;
+};
+
+typedef struct move_triple* move;  // Change me!
+// typedef move* stackelem;
+
+move new_move(int from_row, int from_col, int to_row, int to_col)
+//@requires 0 <= from_row && from_row < 8;
+//@requires 0 <= from_col && from_col < 8;
+//@requires 0 <= to_row && to_row < 8;
+//@requires 0 <= to_col && to_col < 8;
+/*@requires (abs(from_row - to_row) == 2 && from_col == to_col) || 
+            (from_row == to_row && abs(from_col - to_col) == 2);@*/
+// @ensures \result->start == from_row*8 + from_col;
+// @ensures \result->end == to_row*8 + to_col;
+// @ensures \result->over == (from_row+to_row)/2*8 + (from_col+to_col)/2;
+{
+  move new = alloc(struct move_triple);
+
+  new -> start = from_row*8 + from_col;
+  new -> end = to_row*8 + to_col;
+  new -> over = (from_row+to_row)/2*8 + (from_col+to_col)/2;
+
+  return new;
+}
+
+int row_start(move m)
+{
+  return (m->start / 8);
+}
+
+int col_start(move m)
+{
+  return (m->start % 8);
+}
+
+int row_end(move m)
+{
+  return (m->end / 8);
+}
+
+int col_end(move m)
+{
+  return (m->end % 8);
+}
+
+void make_move(board B, move m)
+//@requires is_board(B);
+//@requires 0 <= row_start(m) && row_start(m) < 8;
+//@requires 0 <= col_start(m) && col_start(m) < 8;
+//@requires 0 <= row_end(m) && row_end(m) < 8;
+//@requires 0 <= col_end(m) && col_end(m) < 8;
+/*@requires (abs(row_start(m)-row_end(m))==2 && col_start(m)==col_end(m)) || 
+            (row_start(m)==row_end(m) && abs(col_start(m)-col_end(m)) == 2);@*/
+//@requires B[m->start] == 1 && B[m->end] == 0 && B[m->over] == 1;
+// Is it necessary?
+{
+  int start = m->start;
+  int end = m->end;
+  int over = m->over;
+  B[start] = 0;
+  B[over] = 0;
+  B[end] = 1;
+}
+
+void undo_move(board B, move m)
+//@requires is_board(B);
+//@requires 0 <= row_start(m) && row_start(m) < 8;
+//@requires 0 <= col_start(m) && col_start(m) < 8;
+//@requires 0 <= row_end(m) && row_end(m) < 8;
+//@requires 0 <= col_end(m) && col_end(m) < 8;
+/*@requires (abs(row_start(m)-row_end(m))==2 && col_start(m)==col_end(m)) || 
+            (row_start(m)==row_end(m) && abs(col_start(m)-col_end(m)) == 2);@*/
+//@requires B[m->start] == 0 && B[m->end] == 1 && B[m->over] == 0;
+{
+  int start = m->start;
+  int end = m->end;
+  int over = m->over;
+  B[start] = 1;
+  B[over] = 1;
+  B[end] = 0;
+}
+
+// typedef move* s;
+// typedef void* stackelem;
+
+bool have_hole(board B)
+{
+  for (int i = 0; i < 64; i++){
+    if (B[i] == 0){
+      return true;
+    }
+  }
+  return false;
+}
+
+stack_t all_moves(board B)
+//@requires is_board(B);
+{
+
+  stack_t res = stack_new();
+  if (!have_hole(B)){
+    return res;
+  }
+  for (int i = 0; i < 8*8; i ++){
+    if (B[i] == 1){
+        // decide whether feasible move at left cols
+        if (i%8 > 1){
+          if (i%8 < 8){
+            if (B[i-2] == 0 && B[i-1] == 1){
+              move one_move = new_move(i/8, i%8, i/8, (i-2)%8);
+              void* o_move = (void*) one_move;
+              push(res,o_move);
+            }
+          }
+        }
+        // // decide whether feasible move at upper rows
+        // if (i/8 > 1){
+        //   if (i/8 < 8){
+        //     if (B[i-16] == 0 && B[i-8] == 1){
+        //       move one_move = new_move(i/8, i%8, (i-16)/8, i%8);
+        //       void* o_move = (void*) one_move;
+        //       push(res,o_move);
+        //     }
+        //   }
+        // }
+        // // decide whether feasible move at left cols
+        // if (i%8 > 1){
+        //   if (i%8 < 8){
+        //     if (B[i-2] == 0 && B[i-1] == 1){
+        //       move one_move = new_move(i/8, i%8, i/8, (i-2)%8);
+        //       void* o_move = (void*) one_move;
+        //       push(res,o_move);
+        //     }
+        //   }
+        // }
+        // // decide whether feasible move at right cols
+        // if (i%8 < 6){
+        //   if (i%8 >= 0){
+        //     if (B[i+2] == 0 && B[i+1] == 1){
+        //       move one_move = new_move(i/8, i%8, i/8, (i+2)%8);
+        //       void* o_move = (void*) one_move;
+        //       push(res,o_move);
+        //     }
+        //   }
+        // }
+        // decide whether feasible move at lower rows
+        if (i/8 < 6){
+          if (i/8 >= 0){
+            if (B[i+16] == 0 && B[i+8] == 1){
+              move one_move = new_move(i/8, i%8, (i+16)/8, i%8);
+              void* o_move = (void*) one_move;
+              push(res,o_move);
+            }
+          }
+        }
+        // decide whether feasible move at right cols
+        if (i%8 < 6){
+          if (i%8 >= 0){
+            if (B[i+2] == 0 && B[i+1] == 1){
+              move one_move = new_move(i/8, i%8, i/8, (i+2)%8);
+              void* o_move = (void*) one_move;
+              push(res,o_move);
+            }
+          }
+        }
+        // decide whether feasible move at upper rows
+        if (i/8 > 1){
+          if (i/8 < 8){
+            if (B[i-16] == 0 && B[i-8] == 1){
+              move one_move = new_move(i/8, i%8, (i-16)/8, i%8);
+              void* o_move = (void*) one_move;
+              push(res,o_move);
+            }
+          }
+        }
+        // // decide whether feasible move at left cols
+        // if (i%8 > 1){
+        //   if (i%8 < 8){
+        //     if (B[i-2] == 0 && B[i-1] == 1){
+        //       move one_move = new_move(i/8, i%8, i/8, (i-2)%8);
+        //       void* o_move = (void*) one_move;
+        //       push(res,o_move);
+        //     }
+        //   }
+        // }
+        // decide whether feasible move at lower rows
+        // if (i/8 < 6){
+        //   if (i/8 >= 0){
+        //     if (B[i+16] == 0 && B[i+8] == 1){
+        //       move one_move = new_move(i/8, i%8, (i+16)/8, i%8);
+        //       void* o_move = (void*) one_move;
+        //       push(res,o_move);
+        //     }
+        //   }
+        // }
+        // // decide whether feasible move at upper rows
+        // if (i/8 > 1){
+        //   if (i/8 < 8){
+        //     if (B[i-16] == 0 && B[i-8] == 1){
+        //       move one_move = new_move(i/8, i%8, (i-16)/8, i%8);
+        //       void* o_move = (void*) one_move;
+        //       push(res,o_move);
+        //     }
+        //   }
+        // }
+        // decide whether feasible move at right cols
+        // if (i%8 < 6){
+        //   if (i%8 >= 0){
+        //     if (B[i+2] == 0 && B[i+1] == 1){
+        //       move one_move = new_move(i/8, i%8, i/8, (i+2)%8);
+        //       void* o_move = (void*) one_move;
+        //       push(res,o_move);
+        //     }
+        //   }
+        // }
+      
+    }
+  }
+  return res;
+}

@@ -1,0 +1,162 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+/*
+ * Peg solitaire solver
+ *
+ * 15-122 Principles of Imperative Computation */
+
+#use <conio>
+#use <util>
+
+int f(int x){
+    return 1664525 * x + 1013904223;
+}
+
+int hash_string(string s) {
+    int sum = 0;
+
+    for(int i = 0; i < string_length(s); i++){
+        sum += char_ord(string_charat(s, i));
+        sum = f(sum);
+    }
+
+    return sum; 
+}
+
+int compress_upper_board(board A) {
+    int sum = 0;
+
+    for(int i = 0; i < 32; i++){
+        sum += A[i];
+        sum = f(sum);
+    }
+
+    return sum; 
+}
+
+int compress_lower_board(board A) {
+    int sum = 0;
+
+    for(int i = 32; i < 64; i++){
+        sum += A[i];
+        sum = f(sum);
+    }
+
+    return sum; 
+}
+
+
+
+struct compact_board {
+  int i1;         // First  half of a compacted board
+  int i2;         // second half of a compacted board
+  // Add any field you deem useful
+  int rem_peg;
+  board B;
+};
+typedef struct compact_board cboard;
+
+cboard* compress (board B)
+//@requires is_board(B);
+{
+  cboard* c_board = alloc(struct compact_board); 
+  c_board ->i1 = compress_upper_board(B);
+  c_board ->i2 = compress_lower_board(B);
+  c_board->rem_peg = num_pegs(B);
+  return c_board;
+}
+
+/* Client side implementation for hashtables.  See lib/hdict.o1 */
+
+int cboard_hash(key k)
+//@requires k != NULL;
+{
+  cboard* c_key = (cboard*) k;
+  int c_u_board = c_key->i1;
+  int c_l_board = c_key->i2;
+  return hash_string(string_fromint(c_u_board+c_l_board)); 
+}
+
+bool cboard_eq(key k1, key k2)
+//@requires k1 != NULL && k2 != NULL;
+//@requires \hastag(cboard*,k1) && \hastag(cboard*,k2);
+{
+  cboard* key_k1 = (cboard*) k1;
+  cboard* key_k2 = (cboard*) k2;
+  return (key_k1->i1==key_k2->i1 && key_k1->i2 == key_k2->i2);  // Change me!
+}
+
+key cboard_key(entry e)
+//@requires e != NULL;
+//@ensures \result != NULL;
+{
+  return e;  // Change me!
+}
+
+/* OPTIONAL:
+   If you would like to use pegmark, implement the following function
+   that takes a cboard and returns the corresponding hash table entry.
+   See file performance_debugging.txt for details.
+ */
+entry cboard_to_entry(cboard* c)
+// some contracts may be useful
+{
+  // assert(false);  // Delete me
+  return (void*)c;    // Change me!
+}
+
+
+
+int solve_peg(board B, stack_t solution,hdict_t failed)
+//@requires is_board(B);
+{
+  int small = num_pegs(B);
+  if (num_pegs(B) == 1){
+    return 1;
+  }
+  cboard* cur = compress(B);
+  void* d_look = hdict_lookup(failed,(void*)cur);
+  if (d_look != NULL){
+    return ((cboard*)d_look)->rem_peg;
+  }
+  stack_t allmoves = all_moves(B);
+  while (!stack_empty(allmoves)){
+    move one_move = (move)pop(allmoves);
+    make_move(B,one_move);
+    void* o_move = (void*) one_move;
+    push(solution,o_move);
+    int num = solve_peg(B,solution,failed);
+    if (num < small){
+      small = num;
+    }
+    if (num != 1){
+      undo_move(B,(move)pop(solution));
+    } else {
+      return 1;
+    }
+  }
+  cboard* fail = cur;
+  fail->rem_peg = small;
+  hdict_insert(failed,(void*)fail);
+  return small;
+}
+
+
+int solve(board B, stack_t Sol)
+//@requires is_board(B);
+{
+  while (!stack_empty(Sol)){
+    pop(Sol);
+  }
+  hdict_t failed_boards = hdict_new(100,&cboard_key,&cboard_hash,&cboard_eq);
+  stack_t solution = stack_new();
+  int res = solve_peg(B,solution,failed_boards);
+  if (res == 1){
+    while (!stack_empty(solution)){
+      push(Sol,pop(solution));
+    }
+  }
+  return res;
+}

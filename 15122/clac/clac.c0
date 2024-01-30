@@ -1,0 +1,458 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+/*
+ * Clac, stack-based calculator language
+ *
+ * 15-122 Principles of Imperative Computation
+ */
+
+#use <string>
+#use <parse>
+#use <conio>
+#use <args>
+#use <util>
+
+/* From the perspective of the clac-main.c0 file, state_t is an
+ * abstract type. (typedef ____* state_t) This file contains the
+ * implementation of the state_t type. You will need to modify
+ * this type when you do task 3. */
+
+
+int pow(int x, int y){
+  if (x == 0){
+    return 0;
+  }
+  if (y == 0){
+    return 1;
+  }
+  return x*pow(x,y-1);
+}
+
+int countQ(queue_t Q)
+//@requires Q != NULL;
+{
+  queue_t temp = queue_new();
+  int count = 0;
+  while (!queue_empty(Q)){
+    string ele = deq(Q);
+    count += 1;
+    enq(temp,ele);
+  }
+  while (!queue_empty(temp)){
+    string ele = deq(temp);
+    enq(Q,ele);
+  }
+  return count;
+}
+
+// void deqn(queue_t Q, int n){
+//   while (n != 0){
+//     deq(Q);
+//     n -= 1;
+//   }
+// }
+
+int countS(stack_t S)
+//@requires S != NULL;
+{
+  stack_t temp = stack_new();
+  int count = 0;
+  while (!stack_empty(S)){
+    int ele = pop(S);
+    count += 1;
+    push(temp,ele);
+  }
+  while (!stack_empty(temp)){
+    int ele = pop(temp);
+    push(S,ele);
+  }
+  return count;
+}
+
+int picknS(stack_t S, int n)
+//@requires S != NULL;
+{
+  stack_t temp = stack_new();
+  int count = 0;
+  int xn = 0;
+  bool flag = false;
+  while (!stack_empty(S) && !flag){
+    int ele = pop(S);
+    count += 1;
+    push(temp,ele);
+    if (count == n){
+      xn = ele;
+      flag = true;
+    }
+  }
+  if (!flag){
+    error("insufficient tokens");
+  }
+  while (!stack_empty(temp)){
+    int ele = pop(temp);
+    push(S,ele);
+  }
+  return xn;
+}
+
+bool checksc(queue_t q)
+//@requires q != NULL;
+{
+  bool res = false;
+  while (!queue_empty(q) && !res){
+    string ele = deq(q);
+    if (string_equal(ele,";")){
+      res = true;
+    }
+  }
+  return res;
+}
+
+// queue_t qstack_to_Q(qstack_t A)
+// //@requires A != NULL;
+// {
+//   queue_t res = queue_new();
+//   while (!qstack_empty(A)){
+//     queue_t ele = qpop(A);
+
+//   }
+// }
+
+struct def_support{
+  dict_t dict;
+  qstack_t remainder;
+};
+typedef struct def_support def;
+
+typedef def* state_t;  // MODIFY ME
+state_t init_state()
+//@ensures \result != NULL;
+{
+  def* df = alloc(def);
+  df->dict = dict_new();
+  df->remainder = qstack_new();
+  // dict_insert(df->known,"+",)
+  return df;
+}
+
+
+/* Main clac interpreter. */
+/* Return true: clac top-level interpreter will expect more input */
+/* Return false: clac top-level interpreter will exit */
+bool eval(queue_t inputQ, stack_t S, state_t ST)
+//@requires inputQ != NULL && S != NULL && ST != NULL;
+//@ensures !\result || queue_empty(inputQ);
+{
+  queue_t Q = inputQ;
+  // queue_print(Q);
+  // queue_t tok1 = dict_lookup(ST->dict,tok);
+
+  while (!queue_empty(Q) || !qstack_empty(ST->remainder)) {
+    // queue_print(Q);
+    // if (queue_empty(Q)){
+    //   // qstack_print(ST->remainder);
+    //   Q = qpop(ST->remainder);
+    // }
+      // queue_print(Q);
+      // push(S,)
+    if (queue_empty(Q)){
+      // qstack_print(ST->remainder);
+      Q = qpop(ST->remainder);
+    } else {
+      string tok = deq(Q); /* Is this dequeue safe? */
+      if (string_equal(tok,":")){
+        if (!checksc(queue_read_only_copy(Q))){
+          error("not closed");
+        }
+        string name = deq(Q);
+        // if (dict_lookup(ST->dict,name) != NULL){
+        //   error("unexpected end of input 1");
+        // }
+        int* p = parse_int(name, 10);
+        // queue_t defi = queue_new();
+        if ((p != NULL)||(string_equal(name,"+"))||
+           (string_equal(name,"-"))||(string_equal(name,"*"))||
+           (string_equal(name,"**"))||(string_equal(name,"/"))||
+           (string_equal(name,"%"))||(string_equal(name,"<"))||
+           (string_equal(name,"drop"))||(string_equal(name,"swap"))||
+           (string_equal(name,"rot"))||(string_equal(name,"if"))||
+           (string_equal(name,"pick"))||(string_equal(name,"skip"))) { 
+          /* call error(msg) which prints msg and aborts */
+          // enq(defi,name);
+          string ele = deq(Q);
+          while (!string_equal(ele,";")){
+            ele = deq(Q);
+          }
+          // dict_insert(ST->dict,name,defi);
+        } else {
+          queue_t defi = queue_new();
+          string ele = deq(Q);
+          while (!string_equal(ele,";")){
+            enq(defi,ele);
+            ele = deq(Q);
+          }
+          dict_insert(ST->dict,name,defi);
+        }
+        // dict_insert(ST->dict,name,defi);
+      } else if (string_equal(tok, "print")) {
+        if (!stack_empty(S)){
+          int x = pop(S);
+          printf("%d\n", x);
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok, "quit")) {
+        return false;
+      } else if (string_equal(tok,"+")) {
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (!stack_empty(S)){
+            int x = pop(S);
+            push(S,x+y);
+            // printf("%d\n", x + y);
+          } else {
+            error("insufficient tokens 1");
+          }
+        } else {
+          error("insufficient tokens 2");
+        }
+      } else if (string_equal(tok,"-")) {
+        // printf("%d",1);
+
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (!stack_empty(S)){
+            int x = pop(S);
+            push(S,x-y);
+          } else {
+            error("insufficient tokens");
+          }
+        } else {
+          error("insufficient tokens");
+        }
+        stack_print(S);
+      } else if (string_equal(tok,"*")) {
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (!stack_empty(S)){
+            int x = pop(S);
+            push(S,x*y);
+          } else {
+            error("insufficient tokens");
+          }
+        } else {
+          error("insufficient tokens");
+        } 
+      } else if (string_equal(tok,"**")) {
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (y < 0){
+            error("negative component");
+          }
+          if (!stack_empty(S)){
+            int x = pop(S);
+            push(S,pow(x,y));
+          } else {
+            error("insufficient tokens");
+          }
+        } else {
+          error("insufficient tokens");
+        } 
+      } else if (string_equal(tok,"/")) {
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (y == 0){
+            error("invalid token");
+          }
+          if (!stack_empty(S)){
+            int x = pop(S);
+            if (x == int_min() && y == -1){
+              error("arithmatic error");
+            }
+            push(S,x/y);
+          } else {
+            error("insufficient tokens");
+          }
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok,"%")) {
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (y == 0){
+            error("invalid token");
+          }
+          if (!stack_empty(S)){
+            int x = pop(S);
+            if (x == int_min() && y == -1){
+              error("arithmatic error");
+            }
+            push(S,x%y);
+          } else {
+            error("insufficient tokens");
+          }
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok,"<")) {
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (!stack_empty(S)){
+            int x = pop(S);
+            if (x < y){
+              push(S,1);
+            } else {
+              push(S,0);
+            }
+          } else {  
+            error("insufficient tokens");
+          } 
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok,"drop")) {
+        if (!stack_empty(S)){
+          pop(S);
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok,"swap")) {
+        if (!stack_empty(S)){
+          int y = pop(S);
+          if (!stack_empty(S)){
+            int x = pop(S);
+            push(S,y);
+            push(S,x);
+          } else {
+            error("insufficient tokens");
+          }
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok,"rot")){
+        if (!stack_empty(S)){
+          int z = pop(S);
+          if (!stack_empty(S)){
+            int y = pop(S); 
+            if (!stack_empty(S)){
+              int x = pop(S); 
+              push(S,y);
+              push(S,z);
+              push(S,x);
+            } else {
+              error("insufficient tokens");
+            }
+          } else {
+            error("insufficient tokens");
+          }
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok,"if")){
+        if (!stack_empty(S)){
+          int x = pop(S);
+          // int countQ1  = countQ(Q);
+          if (x == 0){
+            // if (countQ1 < 3){
+            //   error("unexpected end of input");
+            // } else {
+            if (!queue_empty(Q)){
+              deq(Q);
+            } else {
+              error("insufficient tokens");
+            }
+            // if ()
+            if (!queue_empty(Q)){
+              deq(Q);
+            } else {
+              error("insufficient tokens");
+            }
+            if (!queue_empty(Q)){
+              deq(Q);
+            } else {
+              error("insufficient tokens");
+            }
+            // }
+          } 
+        } else {
+          error("not enough elements on stack");
+        }
+      } else if (string_equal(tok,"pick")){
+        if (!stack_empty(S)){
+          int n = pop(S);
+          if (n <= 0){
+            error("invalid pick");
+          }
+          // int count = countS(S);
+          // if (n > count){
+          //   error("insufficient tokens");
+          // }
+          int ele = picknS(S,n);
+          push(S,ele);
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (string_equal(tok,"skip")){
+        if (!stack_empty(S)){
+          int n = pop(S);
+          if (n < 0){
+            error("invalid skip");
+          }
+          
+          while (n != 0){
+            if (!queue_empty(Q)){
+              deq(Q);
+            } else {
+              error("insufficient tokens");
+            }
+            n -= 1;
+          }
+// }
+        } else {
+          error("insufficient tokens");
+        }
+      } else if (dict_lookup(ST->dict,tok) != NULL){
+        queue_t tok1 = dict_lookup(ST->dict,tok);
+        // queue_print(tok1);
+        queue_t temp = queue_read_only_copy(tok1);
+        // queue_print(temp);
+        qpush(ST->remainder,Q);
+        // qstack_print(ST->remainder);
+        Q = temp;
+        // queue_print(Q);
+        // qstack_print(ST->remainder);
+      } else {
+        /* Not defined as an operation name, should be an int */
+        int* p = parse_int(tok, 10);
+        if (p == NULL) { /* not an int */
+          /* call error(msg) which prints msg and aborts */
+          error(string_join("undefined token ", tok));
+        }
+        push(S, *p);
+      }
+    }
+    // if (queue_empty(Q)){
+    //   // qstack_print(ST->remainder);
+    //   Q = qpop(ST->remainder);
+    // }
+    // if (!qstack_empty(ST->remainder)){
+    //   // qstack_print(ST->remainder);
+    //   Q = qpop(ST->remainder);
+    //   // queue_print(Q);
+    //   // push(S,)
+    }
+  // how to push the calculated result back to stack
+  // if (!qstack_empty(ST->remainder)){
+  //   Q = qpop(ST->remainder);
+  // }
+  // stack_print(S);
+  return true;
+
+
+  /* When you return "true", don't pop anything off the stack! When we
+   * grade your function, we'll check that the stack contains the
+   * integers we expect. */
+  // return true;
+}

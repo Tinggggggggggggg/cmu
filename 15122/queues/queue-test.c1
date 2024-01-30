@@ -1,0 +1,81 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+#use <conio>
+
+// You are welcome to define helper functions for your tests
+
+int main() {
+  queue_t q = queue_new();
+  // print_queue(q,&prt_int);//nothing
+  int* a = alloc(int);
+  int* b = alloc(int);
+  int* c = alloc(int);
+  int* d = alloc(int);
+  int* e = alloc(int);
+  *a = 0;
+  *b = 1;
+  *c = 90;
+  *d = 6;
+  *e = 8;
+  enq(q,(void*)a);
+  enq(q,(void*)b);
+  enq(q,(void*)c);
+  enq(q,(void*)d);
+  enq(q,(void*)e);
+  printf("\n%d\n",*(int*)queue_peek(q, 2));//should be 3
+  // print_queue(q,&prt_int);//1 2 3 4 5 null
+  deq(q);
+  // print_queue(q,&prt_int);//2 3 4 5 null
+  
+  //queue_reverse(q);
+  //print_queue(q,&prt_int);//5 4 3 2 null
+  //enq(q,(void*)e);
+  //print_queue(q,&prt_int);//5 4 3 2 null
+
+  printf("%s","is it a inclusive seg?\n");
+  if(is_inclusive_segment(q->front, q->back, 2)){
+    printf("%d",1);
+  }
+  else{
+    printf("%d\n",0);
+  }
+  queue_all(q, &incr);
+  // print_queue(q,&prt_int);
+  
+  queue_reverse(q);
+  // print_queue(q,&prt_int);
+  //test find negative
+  int* kkk = (int*)(queue_iterate(q, NULL, &find_negative));
+  if(kkk != NULL) printf("\nclosest negative:%d",*kkk); else printf("\n%s","No Negative");
+  
+  //test copy
+  queue_t newQ = queue_new();
+  queue_iterate(q, (void*)newQ, &copy);
+  printf("\n\n%s\n%s","AFTER COPY ITERATION:","oldQ:");
+  
+  print_queue(q,&prt_int);//compare and contrast
+  printf("\n%s","newQ:");
+  print_queue(newQ,&prt_int);//compare and contrast
+
+  //test insert
+  queue_t R = queue_new();  //new queue
+    while (queue_size(q) > 0) {  
+    int* p1 = alloc(int);  
+    void* p2 = deq(q);  
+    //@assert p2 != NULL && \hastag(int*, p2);  
+    *p1 = *(int*)p2;  
+    queue_iterate(R, (void*)p1, &insert);  
+    enq(R,(void*)p1);  
+}  
+  // print_queue(R,&prt_int);
+
+  printf("%s\n","before sort:");
+  // print_queue(newQ,&prt_int);
+  queue_iterate(newQ,newQ->front->data, &insert);
+  printf("\n%s\n","after sort:");
+  // print_queue(newQ,&prt_int);
+  printf("All tests passed!\n");
+  return 0;
+}

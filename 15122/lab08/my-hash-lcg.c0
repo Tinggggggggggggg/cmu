@@ -1,0 +1,16 @@
+#use <string>
+
+int f(int x){
+    return 1664525 * x + 1013904223;
+}
+
+int hash_string(string s) {
+    int sum = 0;
+
+    for(int i = 0; i < string_length(s); i++){
+        sum += char_ord(string_charat(s, i));
+        sum = f(sum);
+    }
+
+    return sum; 
+}

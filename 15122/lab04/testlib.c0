@@ -1,0 +1,37 @@
+#use <conio>
+#use <string>
+#use <parse>
+
+
+/**
+ * Prints out a helpful message indicating a test is complete
+ */
+void test_completed(string description, bool success) {
+    print("\t");
+    print(description);
+    print(".... ");
+    if(success) {
+        println("Passed");
+    } else {
+        println("Failed");
+    }
+}
+
+bool arr_eq(int[] A, int n, int[] B, int m)
+//@requires n <= \length(A);
+//@requires m <= \length(B);
+{
+  if(n != m) return false;
+
+  //@assert n == m;
+
+  for (int i = 0; i < n; i++)
+  //@loop_invariant 0 <= i && i <= n;
+  {
+    if (A[i] != B[i]) return false;
+  }
+  return true;
+}
+
+
+// Also, use parse_ints from <parse>!

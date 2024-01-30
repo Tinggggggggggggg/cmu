@@ -1,0 +1,88 @@
+// A function even such that queue_all(Q,&even) returns true if all t
+// he pointers in Q are non-NULL and all point to non-negative, even integers
+bool even(void* elem)
+//@requires elem == NULL || \hastag(int*,elem);
+{
+    return elem!=NULL && *((int*)elem) >= 0 && *((int*)elem)%2 == 0;
+}
+
+
+// A function odd such that queue_all(Q,&odd) returns true 
+// if each pointer in Q is either NULL or a pointer to positive, odd integers
+bool odd(void* elem)
+//@requires elem == NULL || \hastag(int*,elem);
+{
+    return elem == NULL || (*((int*)elem)>0 && *((int*)elem)%2 == 1);
+}
+
+// A function incr such that queue_all(Q,&incr) always returns true, 
+// but after the function is run, all the non-NULL pointers in the queue 
+// should have the integers they point to incremented by 1
+bool incr(void* elem)
+//@requires elem == NULL || \hastag(int*,elem);
+{
+    if (elem != NULL){
+        *((int*)elem) += 1;
+        // int* num = alloc(int);
+        // *num = *((int*)elem)+1;
+        // elem = (void*)num;
+    }
+    return true;
+}
+
+// A function find_negative such that queue_iterate(Q,NULL,&find_negative) 
+// returns NULL if there are no pointers to negative numbers in the queue, and 
+// returns the pointer to the negative number closest to the front of the queue
+// if any such element exists. The function should have \hastag(int*,\result)
+//  as a postcondition
+void* find_negative(void* base,void* elem)
+//@requires base == NULL || \hastag(int*,base);
+//@requires elem == NULL || \hastag(int*,elem);
+//@ensures  \hastag(int*,\result);
+{
+    if (elem == NULL){
+        return NULL;
+    }
+    if (base != NULL){
+        return base;
+    }
+    // if (elem)
+    if (*((int*)elem) < 0){
+        return elem;
+    } 
+    return NULL;
+}
+
+
+// A function copy such that queue_iterate(Q,(void*)queue_new(),&copy) returns 
+// a copy of the queue. It should contain aliases to the elements in Q. The 
+// function should have \hastag(queue_t,\result) as a postcondition.
+void* copy(void*new ,void* elem)
+//@requires new == NULL || \hastag(queue_t,new);
+//@requires elem == NULL || \hastag(int*,elem);
+//@ensures  \hastag(queue_t,\result);
+{
+    enq((queue_t)new,elem);
+    return new;
+}
+
+
+// A function insert, which takes two non-NULL void pointers that are actually 
+// pointers to integers. It swaps the values these pointers point to if the 
+// second value is larger than the first value. It then returns the first 
+// pointer
+void* insert(void* first, void* second)
+//@requires first != NULL && \hastag(int*,first);
+//@requires second != NULL && \hastag(int*,second);
+// @ensures \hastag(void*,\result);
+{
+    int first_num = *((int*) first);
+    int second_num = *((int*) second);
+    if (second_num > first_num){
+        // int temp = first_num;
+        *((int*)first) = second_num;
+        *((int*)second) = first_num;
+    }
+    return first;
+
+}

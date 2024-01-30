@@ -1,0 +1,43 @@
+#use <conio>
+#use <util>
+#use <parse>
+
+void run_testcase(string A_as_str, string B_as_str, string Expected_as_str)
+//@requires int_tokens(A_as_str, 10);
+//@requires int_tokens(B_as_str, 10);
+//@requires int_tokens(Expected_as_str, 10);
+{
+  // Parse strings to int arrays
+  int[] A = parse_ints(A_as_str, 10);
+  int a_len = num_tokens(A_as_str);
+  //@assert \length(A) == a_len;
+  int[] B = parse_ints(B_as_str, 10);
+  int b_len = num_tokens(B_as_str);
+  //@assert \length(B) == b_len;
+  int[] Expected = parse_ints(Expected_as_str, 10);
+  int expected_len = num_tokens(Expected_as_str);
+  //@assert \length(Expected) == expected_len;
+
+  // Compute the intersection
+  int size = min(a_len,b_len) ; // Fill me in!
+  int[] Intersection = alloc_array(int, size);
+  int len = intersect(A,a_len, B, b_len, Intersection);
+
+  // Assert that result is correct
+  assert(arr_eq(Intersection,len,Expected,expected_len));
+}
+
+
+void run_tests() {
+    // Remember - this function should call run testcase a bunch of times!
+  run_testcase("1 2 3 4 5 6", "1 2 3 4 5 6", "1 2 3 4 5 6");
+  run_testcase("1 2 3 4 5 6", "7 8 9", "");
+  run_testcase("", "7 8 9", "");
+  run_testcase("7 8 9", "", "");
+  run_testcase("-7 6 2 1 8 9 -5", "-7 2 9 -5 12", "-7 -5 2 9");
+  run_testcase("1 1 3 4 5 6", "1 1 9", "1");
+
+  // run_testcase("1 2 3 4 5 6", "7 8 9", "");
+
+
+}

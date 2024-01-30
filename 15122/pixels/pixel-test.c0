@@ -1,0 +1,48 @@
+/**************************************************************************/
+/*              COPYRIGHT Carnegie Mellon University 2023                 */
+/* Do not post this file or any derivative on a public site or repository */
+/**************************************************************************/
+#use <util>
+#use <conio>
+
+// You are welcome to define helper functions for your tests
+
+int main() {
+  // Test some regular cases
+  assert(make_pixel(167,183,213,94) == 0xA7B7D55E);
+  assert(make_pixel(128,78,226,101) == 0x804EE265);
+  assert(make_pixel(72,31,83,3) == 0x481F5303);
+
+  assert(get_alpha(0xA7B7D55E) == 167);
+  assert(get_red(0xA7B7D55E) == 183);
+  assert(get_green(0xA7B7D55E) == 213);
+  assert(get_blue(0xA7B7D55E) == 94);
+
+  assert(get_alpha(0x804EE265) == 128);
+  assert(get_red(0x804EE265) == 78);
+  assert(get_green(0x804EE265) == 226);
+  assert(get_blue(0x804EE265) == 101);
+
+  assert(get_alpha(0x481F5303) == 72);
+  assert(get_red(0x481F5303) == 31);
+  assert(get_green(0x481F5303) == 83);
+  assert(get_blue(0x481F5303) == 3);  
+
+
+  // Run some edge cases
+  assert(make_pixel(255,255,255,255) == 0xFFFFFFFF);
+  assert(make_pixel(0,0,0,0) == 0x00000000);
+  assert(get_alpha(0xFF4B3ADE) == 255);
+  assert(get_alpha(0x004B3ADE) == 0);
+  assert(get_red(0x4BFF3ADE) == 255);
+  assert(get_red(0x4B003ADE) == 0);
+  assert(get_green(0x4B3AFFDE) == 255);
+  assert(get_green(0x4B3A00DE) == 0);
+  assert(get_blue(0x4B3ADEFF) == 255);
+  assert(get_blue(0x4B3ADE00) == 0);
+
+
+
+  printf("All tests passed!\n");
+  return 0;
+}

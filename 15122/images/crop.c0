@@ -1,0 +1,27 @@
+
+
+pixel_t[] crop(pixel_t[] pixels, int width, int height,  
+               int left, int top, int new_width, int new_height)
+//@requires is_valid_imagesize(width, height);
+//@requires is_valid_imagesize(new_width,new_height);
+//@requires \length(pixels) == width*height;
+//@ensures \result != pixels && \length(\result) == new_width*new_height;
+{
+    pixel_t[] cropped = alloc_array(pixel_t, new_width*new_height);
+    for (int j = top; j < top+new_height; j++)
+    //@loop_invariant top <= j;
+    {
+        for (int i = left; i < left+new_width; i++)
+        //@loop_invariant left <= i;
+        {
+            //@assert top<=j &&j<top+new_height &&left<=i &&i<left+new_width;
+            int index = get_index(j, i, width, height);
+            //@assert 0 <= index && index < \length(pixels);
+            int indexC = get_index((j-top),(i-left),new_width,new_height);
+            //@assert 0 <= indexC && indexC < \length(cropped);
+            cropped[indexC] = pixels[index];
+            // @assert \length(Cover) == \length(Stego);
+        }
+    }
+    return cropped;
+}

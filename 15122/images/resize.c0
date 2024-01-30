@@ -1,0 +1,122 @@
+
+// horizontally stretch      strech k pixels between original 2
+// for each pixel, all four colors gradually change
+pixel_t[] stretch_horizontally(pixel_t[] pixels, int width, int height, int k)
+//@requires is_valid_imagesize(width, height);
+//@requires \length(pixels) == width*height;
+//@ensures \result != pixels;
+{
+    pixel_t[] Stretched = alloc_array(pixel_t,
+                    width*height+(width-1)*k*height);
+    for (int row = 0; row < height; row++)
+    //@loop_invariant 0 <= row;
+    {
+        for (int col = 0; col < width; col++)
+        //@loop_invariant 0 <= col;
+        {
+            //@assert 0 <= row && row < height && 0 <= col && col < width;
+            int indexP0 = get_index(row, col, width, height);
+            if (col == width -1)
+            {
+                int indexLast= get_index(row,(width+(width-1)*k)-1,
+                                         width+(width-1)*k,height);
+                Stretched[indexLast] = pixels[indexP0];
+                
+            } 
+            else            
+            {
+                int indexQ0 = get_index(row, col+1, width, height);
+                //@assert 0 <= indexP0 && indexP0 < \length(pixels);
+                //@assert 0 <= indexQ0 && indexQ0 < \length(pixels);
+                pixel_t p0 = pixels[indexP0];
+                pixel_t q0 = pixels[indexQ0];
+                int p0alpha = get_alpha(p0);
+                int p0red = get_red(p0);
+                int p0green = get_green(p0);
+                int p0blue = get_blue(p0);
+                int q0alpha = get_alpha(q0);
+                int q0red = get_red(q0);
+                int q0green = get_green(q0);
+                int q0blue = get_blue(q0);
+                for (int j=0; j<=k ; j++)
+                //@loop_invariant 0 <= j;
+                {
+                    int pjAlpha = ((k+1-j)*p0alpha+j*q0alpha)/(k+1);
+                    int pjRed = ((k+1-j)*p0red+j*q0red)/(k+1);
+                    int pjGreen = ((k+1-j)*p0green+j*q0green)/(k+1);
+                    int pjBlue = ((k+1-j)*p0blue+j*q0blue)/(k+1);
+                    pixel_t pjPixel =make_pixel(pjAlpha,pjRed,pjGreen,pjBlue);
+                    Stretched[row*(width+(width-1)*k)+j+col*(k+1)] = pjPixel; 
+                }
+            }
+        }
+    }
+    return Stretched;
+}
+
+
+pixel_t[] stretch_vertically(pixel_t[] pixels, int width, int height, int k)
+//@requires is_valid_imagesize(width, height);
+//@requires \length(pixels) == width*height;
+//@ensures \result != pixels;
+{
+    pixel_t[] Stretched = alloc_array(pixel_t,
+                    width*height+width*k*(height-1));
+    for (int col = 0; col < width; col++)
+    //@loop_invariant 0 <= col;
+    {
+        for (int row = 0; row < height; row++)
+        //@loop_invariant 0 <= row;
+        {
+            //@assert 0 <= row && row < height && 0 <= col && col < width;
+            int indexP0 = get_index(row, col, width, height);
+            if (row == height -1)
+            {
+                int indexLast= get_index((height+(height-1)*k)-1,col,
+                                         width,(height+(height-1)*k));
+                Stretched[indexLast] = pixels[indexP0];
+                
+            } 
+            else            
+            {
+                int indexQ0 = get_index(row+1, col, width, height);
+                //@assert 0 <= indexP0 && indexP0 < \length(pixels);
+                //@assert 0 <= indexQ0 && indexQ0 < \length(pixels);
+                pixel_t p0 = pixels[indexP0];
+                pixel_t q0 = pixels[indexQ0];
+                int p0alpha = get_alpha(p0);
+                int p0red = get_red(p0);
+                int p0green = get_green(p0);
+                int p0blue = get_blue(p0);
+                int q0alpha = get_alpha(q0);
+                int q0red = get_red(q0);
+                int q0green = get_green(q0);
+                int q0blue = get_blue(q0);
+                for (int j=0; j<=k ; j++)
+                //@loop_invariant 0 <= j;
+                {
+                    int pjAlpha = ((k+1-j)*p0alpha+j*q0alpha)/(k+1);
+                    int pjRed = ((k+1-j)*p0red+j*q0red)/(k+1);
+                    int pjGreen = ((k+1-j)*p0green+j*q0green)/(k+1);
+                    int pjBlue = ((k+1-j)*p0blue+j*q0blue)/(k+1);
+                    pixel_t pjPixel =make_pixel(pjAlpha,pjRed,pjGreen,pjBlue);
+                    int newIndex = get_index((k+1)*row+j,col,
+                                             width,(height+(height-1)*k));
+                    Stretched[newIndex]=pjPixel; 
+                }
+            }
+        }
+    }
+    return Stretched;
+}
+
+pixel_t[] upsize(pixel_t[] pixels, int width, int height, int k) 
+//@requires is_valid_imagesize(width, height);
+//@requires \length(pixels) == width*height;
+//@ensures \result != pixels;
+{
+    pixel_t[] StretchedH = stretch_horizontally(pixels,width,height,k);
+    pixel_t[]upsize=stretch_vertically(StretchedH,
+                                       width+k*(width-1),height,k);
+    return upsize;
+}

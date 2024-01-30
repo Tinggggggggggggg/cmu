@@ -1,0 +1,106 @@
+#use <conio>
+#use <util>
+
+/*
+In a new file queue-use.c1, implement the following functions, 
+which are intended to be passed to either queue_all or queue_iterate. 
+Your code in this file should respect the queue interface.
+
+For all of these questions, you can assume that the queue you’re working with contains pointers to integers. 
+That is, you can assume \hastag(int*,x) will return true for every data element in the structure. 
+This means every data element is either NULL or an int* that has been cast to void*. 
+The functions you write should enforce this as a precondition, 
+and should in general have preconditions that ensure safety. 
+Only incr should cause any of the data in the queue to be changed.
+
+1. A function even such that queue_all(Q,&even) returns true 
+if all the pointers in Q are non-NULL 
+and all point to non-negative, even integers. */
+bool even(void* a)
+//@requires  a==NULL ||\hastag(int*, a);
+{
+    return a!=NULL&&(*(int*)a)!=int_min()&&(*(int*)a-1)%2 == 1;
+}
+/*
+
+A function odd such that queue_all(Q,&odd) returns true 
+if each pointer in Q is either NULL or a pointer to positive, odd integers.
+*/
+bool odd(void* a)
+//@requires  a==NULL ||\hastag(int*, a);
+{
+    return a==NULL||(*(int*)a)%2 == 1;
+}
+/*
+A function incr such that queue_all(Q,&incr) always returns true, 
+but after the function is run, all the non-NULL pointers in the queue should have the integers they point to incremented by 1.
+*/
+bool incr(void* a)
+//@requires a==NULL || \hastag(int*, a);
+{   
+    (*(int*)a) = a!=NULL ? (*(int*)a)+1 : (*(int*)a);
+    return true;
+}
+/*
+A function find_negative such that queue_iterate(Q,NULL,&find_negative) returns NULL 
+if there are no pointers to negative numbers in the queue, 
+and returns the pointer to the negative number closest to the front of the queue 
+if any such element exists. The function should have \hastag(int*,\result) as a postcondition.
+*/
+void* find_negative(void* base,void* ele)
+///@requires ele!=NULL ;
+//@requires  ele==NULL ||\hastag(int*,ele);
+//@requires base==NULL ||\hastag(int*,base);
+//@ensures \hastag(int*,\result);
+{
+    if(base==NULL){
+        if(ele==NULL) return base;
+        int k = *(int*)ele;
+        if(k<0){
+            return ele;
+        }
+        else{
+            return NULL;
+        }
+    }///@assert base!=NULL;
+    else{
+        //@assert base!=NULL;
+        return base;
+    }
+}
+
+
+
+/*
+A function copy such that queue_iterate(Q,(void*)queue_new(),&copy) returns a copy of the queue. 
+It should contain aliases to the elements in Q. 
+The function should have \hastag(queue_t,\result) as a postcondition.
+*/
+void* copy(void* Q,void* ele)
+///@requires ele!=NULL ;
+//@requires  ele==NULL ||\hastag(int*,ele);
+//@requires Q==NULL ||\hastag(queue_t,Q);
+//@ensures \hastag(queue_t,\result);
+{
+    enq((queue_t)(Q),ele);
+    return Q;
+}
+
+/*
+A function insert, which takes two non-NULL void pointers that are actually pointers to integers. 
+It swaps the values these pointers point to if the second value is larger than the first value. 
+It then returns the first pointer.*/
+
+void* insert(void* one,void* two)
+///@requires ele!=NULL ;
+//@requires  one!=NULL&&\hastag(int*,one);
+//@requires two!=NULL&&\hastag(int*,one);
+//@ensures \hastag(int*,\result);
+{   
+    if((*(int*)two)>(*(int*)one)){
+        int* tmp = (int*)one;
+        one = two;
+        two = (void*)tmp;  
+    }
+    return one;
+}
